@@ -71,6 +71,7 @@ public class WeatherActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
 //                Log.d("response=========",response.body().string());
                 String respStr = response.body().string();
+                Log.d("response=========",respStr);
                 try {
                     JSONObject jsonObject = new JSONObject(respStr);
                     JSONArray heWeather = jsonObject.getJSONArray("HeWeather");
@@ -80,7 +81,7 @@ public class WeatherActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            textTmp.setText(now.getTmp()+"℃");
+                            textTmp.setText(now.getTmp()+"℃\n"+now.getWind().getDir());
                         }
                     });
                 } catch (JSONException e) {

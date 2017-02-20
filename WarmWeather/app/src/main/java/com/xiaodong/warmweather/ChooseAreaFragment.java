@@ -110,7 +110,7 @@ public class ChooseAreaFragment extends Fragment {
             for (Province province : provinceList) {
                 datalist.add(province.getProvinceName());
             }
-            area_list.setSelection(1);
+            area_list.setSelection(0);
             arrayAdapter.notifyDataSetChanged();
 
         } else {
@@ -130,8 +130,10 @@ public class ChooseAreaFragment extends Fragment {
             for (City city:cityList){
                 datalist.add(city.getCityName());
             }
-            area_list.setSelection(0);
             arrayAdapter.notifyDataSetChanged();
+            area_list.smoothScrollToPosition(0);
+            area_list.setSelection(0);
+
         }else {
             String address =  "http://guolin.tech/api/china/"+selectedProvince.getProvinceCode();
             Log.e("address", address);
@@ -150,8 +152,8 @@ public class ChooseAreaFragment extends Fragment {
             for (County county:countyList) {
                 datalist.add(county.getCountyName());
             }
-            area_list.setSelection(0);
             arrayAdapter.notifyDataSetChanged();
+            area_list.setSelection(0);
         }else {
             String address = "http://guolin.tech/api/china/"+selectedProvince.getProvinceCode()+"/"+selectedCity.getCityCode();
             Log.e("address", address);
