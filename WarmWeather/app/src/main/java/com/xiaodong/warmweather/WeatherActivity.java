@@ -1,5 +1,6 @@
 package com.xiaodong.warmweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.xiaodong.warmweather.gson.Now;
 import com.xiaodong.warmweather.gson.Suggestion;
 import com.xiaodong.warmweather.gson.WeatherInfo;
+import com.xiaodong.warmweather.service.WeatherService;
 import com.xiaodong.warmweather.util.HttpUtil;
 import com.xiaodong.warmweather.util.Utility;
 
@@ -50,7 +52,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView sugs_trav;
     private TextView sugs_uv;
     public DrawerLayout drawerLayout;
-    public final String WEATHER_JSON_STRING="weather_json_string";
+    public static final String WEATHER_JSON_STRING="weather_json_string";
     private  SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +129,7 @@ public class WeatherActivity extends AppCompatActivity {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
         }
-        //从服务器从新获取数据时要用最新的weathercode和cityname
+        //从服务器重新获取数据时要用最新的weathercode和cityname
         weatherCode = sharedPreferences.getString(ChooseAreaFragment.SELECTED_WEATHERCODE,null);
         cityName = sharedPreferences.getString(ChooseAreaFragment.SELECTED_CITYNAME,null);
         HttpUtil.sendOkHttpRequest("http://guolin.tech/api/weather?cityid=" + weatherCode + "&key=4e5ec8e307ba48e2921c023b78e45435", new Callback() {
@@ -187,6 +189,8 @@ public class WeatherActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+        Intent intent = new Intent(this, WeatherService.class);
+        startService(intent);
     }
 
     public void handleWeatherPic(){
