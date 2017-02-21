@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="生活指数"
+        android:textSize="20dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/cmftitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="舒适度"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_comf"
+            android:layout_below="@id/cmftitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/cw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="洗车指数"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_cw"
+            android:layout_below="@id/cw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/drsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="穿衣指数"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_drsg"
+            android:layout_below="@id/drsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/flu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="感冒指数"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_flu"
+            android:layout_below="@id/flu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/sport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="运动指数"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_sport"
+            android:layout_below="@id/sport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/trav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="旅行指数"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_trav"
+            android:layout_below="@id/trav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/uv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="紫外线指数"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/text_uv"
+            android:layout_below="@id/uv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

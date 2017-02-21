@@ -14,6 +14,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:titleEnabled="false"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary">
@@ -31,12 +32,15 @@
                     android:id="@+id/text_tmp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:text="20℃"
+                    android:gravity="center_horizontal"
                     android:textColor="@android:color/white"
-                    android:textSize="26sp"
+                    android:textSize="16sp"
                     android:layout_margin="10dp"/>
             </RelativeLayout>
 
@@ -45,7 +49,29 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"/>
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/weather_icon"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerInside"/>
+
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -68,15 +94,7 @@
                 android:layout_marginTop="30dp"
                 app:cardCornerRadius="8dp"
                 app:elevation="10dp">
-                <TextView
-                    android:id="@+id/content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="ssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-                    sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-                    ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
-                    android:textSize="16dp"/>
+                <include layout="@layout/layout_suggestion"/>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
