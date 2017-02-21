@@ -2,9 +2,12 @@ package com.xiaodong.warmweather;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,11 +91,23 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity = cityList.get(position);
                     queryCounty();
                 }else if (level == LEVEL_COUNTY){
-                    Intent intent = new Intent();
-                    intent.setAction("com.warmweather.act");
-                    intent.putExtra(SELECTED_CITYNAME, countyList.get(position).getCountyName());
-                    intent.putExtra(SELECTED_WEATHERCODE, countyList.get(position).getWeather_id());
-                    startActivity(intent);
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SELECTED_CITYNAME, countyList.get(position).getCountyName());
+                    editor.putString(SELECTED_WEATHERCODE, countyList.get(position).getWeather_id());
+                    editor.commit();
+//                    intent.putExtra(SELECTED_CITYNAME, countyList.get(position).getCountyName());
+//                    intent.putExtra(SELECTED_WEATHERCODE, countyList.get(position).getWeather_id());
+                    if(getActivity() instanceof AreaActivity) {
+                        Intent intent = new Intent();
+                        intent.setAction("com.warmweather.act");
+                        startActivity(intent);
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawer(GravityCompat.START);
+                        activity.swipeRefreshLayout.setRefreshing(true);
+                        activity.queryWeatherFromServer();
+                    }
                 }
             }
         });

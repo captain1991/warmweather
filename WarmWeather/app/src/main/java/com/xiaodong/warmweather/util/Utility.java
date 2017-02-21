@@ -1,8 +1,10 @@
 package com.xiaodong.warmweather.util;
 
+import com.google.gson.Gson;
 import com.xiaodong.warmweather.db.City;
 import com.xiaodong.warmweather.db.County;
 import com.xiaodong.warmweather.db.Province;
+import com.xiaodong.warmweather.gson.WeatherInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,5 +80,21 @@ public class Utility {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static WeatherInfo handleWeatherResponse(String respStr){
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(respStr);
+            JSONArray heWeather = jsonObject.getJSONArray("HeWeather");
+            JSONObject info = heWeather.getJSONObject(0);
+            Gson mGson = new Gson();
+            WeatherInfo weatherInfo = mGson.fromJson(info.toString(),WeatherInfo.class);
+            return weatherInfo;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
