@@ -102,6 +102,7 @@ public class ChooseAreaFragment extends Fragment {
                         Intent intent = new Intent();
                         intent.setAction("com.warmweather.act");
                         startActivity(intent);
+                        getActivity().finish();
                     }else if(getActivity() instanceof WeatherActivity){
                         WeatherActivity activity = (WeatherActivity) getActivity();
                         activity.drawerLayout.closeDrawer(GravityCompat.START);
@@ -182,8 +183,13 @@ public class ChooseAreaFragment extends Fragment {
         HttpUtil.sendOkHttpRequest(adderss, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                dismissProgressDialog();
-                Toast.makeText(getActivity(), "获取地址失败", Toast.LENGTH_SHORT).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissProgressDialog();
+                        Toast.makeText(getActivity(), "获取地址失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override

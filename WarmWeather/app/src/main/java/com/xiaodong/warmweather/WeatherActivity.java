@@ -15,12 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.xiaodong.warmweather.gson.DailyForcast;
 import com.xiaodong.warmweather.gson.Now;
 import com.xiaodong.warmweather.gson.Suggestion;
 import com.xiaodong.warmweather.gson.WeatherInfo;
@@ -29,6 +33,7 @@ import com.xiaodong.warmweather.util.HttpUtil;
 import com.xiaodong.warmweather.util.Utility;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,6 +59,7 @@ public class WeatherActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public static final String WEATHER_JSON_STRING="weather_json_string";
     private  SharedPreferences sharedPreferences;
+    private LinearLayout forecast_container;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +110,8 @@ public class WeatherActivity extends AppCompatActivity {
         sugs_sport = (TextView) findViewById(R.id.text_sport);
         sugs_trav = (TextView) findViewById(R.id.text_trav);
         sugs_uv = (TextView) findViewById(R.id.text_uv);
+
+        forecast_container = (LinearLayout) findViewById(R.id.forecast_container);
 
         handleWeatherPic();
         queryWeather();
@@ -164,7 +172,7 @@ public class WeatherActivity extends AppCompatActivity {
         });
     }
 
-    public void showWeatherInfo( WeatherInfo weatherInfo ){
+    public void showWeatherInfo( final WeatherInfo weatherInfo ){
         if(weatherInfo==null){
             Toast.makeText(WeatherActivity.this,"获取天气信息出错",Toast.LENGTH_SHORT).show();
             swipeRefreshLayout.setRefreshing(false);
@@ -186,6 +194,7 @@ public class WeatherActivity extends AppCompatActivity {
                 sugs_sport.setText(suggestion.getSport().getTxt());
                 sugs_trav.setText(suggestion.getTrav().getTxt());
                 sugs_uv.setText(suggestion.getUv().getTxt());
+                addForeCast(weatherInfo.getDailyForcasts());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -212,6 +221,24 @@ public class WeatherActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void addForeCast(List<DailyForcast> dailyForcasts){
+        forecast_container.removeAllViews();
+        for (DailyForcast dailyForcast:dailyForcasts) {
+            View view = LayoutInflater.from(this).inflate(R.layout.daily_item,null);
+            TextView text_date = (TextView)view.findViewById(R.id.text_date);
+            TextView text_weather = (TextView)view.findViewById(R.id.text_weather);
+            TextView text_daily_tmp = (TextView)view.findViewById(R.id.text_daily_tmp);
+            Log.d("dailyForcast===========", dailyForcast.getDate());
+            String date = dailyForcast.getDate();
+            String weather = "白天"+dailyForcast.getCond().getTxt_d()+"|夜晚"+dailyForcast.getCond().getTxt_n()+"|"+dailyForcast.getWind().getDir()+dailyForcast.getWind().getSc();
+            String tmp = dailyForcast.getTmp().getMax()+"° / "+dailyForcast.getTmp().getMin()+"°";
+            text_date.setText(date);
+            text_weather.setText(weather);
+            text_daily_tmp.setText(tmp);
+            forecast_container.addView(view);
+        }
     }
 
     @Override
