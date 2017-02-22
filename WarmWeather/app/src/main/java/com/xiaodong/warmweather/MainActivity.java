@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         HttpUtil.sendOkHttpRequest("http://guolin.tech/api/china", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                //main
 //                Toast.makeText(MainActivity.this,"网络异常",Toast.LENGTH_SHORT).show();
                 Log.e("failure=======", e.toString());
             }
