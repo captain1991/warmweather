@@ -1,5 +1,7 @@
 package com.xiaodong.warmweather.gson;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,16 +10,25 @@ import java.util.List;
 public class WeatherInfo {
     Now now;
     Suggestion suggestion;
-//    @SerializedName("daily_forecast")
-    List<DailyForcast> daily_forecast;
+    @SerializedName("daily_forecast")
+    List<DailyForcast> dailyForcasts;
+    Aqi aqi;
+
+    public Aqi getAqi() {
+        return aqi;
+    }
+
+    public void setAqi(Aqi aqi) {
+        this.aqi = aqi;
+    }
 
     public void setDailyForcasts(List<DailyForcast> dailyForcasts) {
-        this.daily_forecast = dailyForcasts;
+        this.dailyForcasts = dailyForcasts;
     }
 
     public List<DailyForcast> getDailyForcasts() {
 
-        return daily_forecast;
+        return dailyForcasts;
     }
 
     public void setNow(Now now) {

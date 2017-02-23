@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.xiaodong.warmweather.gson.Aqi;
 import com.xiaodong.warmweather.gson.DailyForcast;
 import com.xiaodong.warmweather.gson.Now;
 import com.xiaodong.warmweather.gson.Suggestion;
@@ -60,6 +61,7 @@ public class WeatherActivity extends AppCompatActivity {
     public static final String WEATHER_JSON_STRING="weather_json_string";
     private  SharedPreferences sharedPreferences;
     private LinearLayout forecast_container;
+    private TextView text_aqi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +103,7 @@ public class WeatherActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
+        text_aqi = (TextView) findViewById(R.id.text_aqi);
         weatherImage = (ImageView) findViewById(R.id.weather_pic);
 
         sugs_comf = (TextView) findViewById(R.id.text_comf);
@@ -181,10 +184,12 @@ public class WeatherActivity extends AppCompatActivity {
         }
         final Now now = weatherInfo.getNow();
         final Suggestion suggestion = weatherInfo.getSuggestion();
+        final Aqi.CityBean cityBean = weatherInfo.getAqi().getCity();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textTmp.setText(now.getCond().getTxt() + now.getTmp() + "℃ | " + now.getWind().getDir() + now.getWind().getSc() + " | 相对湿度" + now.getHum() + "%");
+                String bottom_content = now.getCond().getTxt() + now.getTmp() + "℃ | " + now.getWind().getDir() + now.getWind().getSc() + " | 相对湿度" + now.getHum() + "%";
+                textTmp.setText(bottom_content);
                 Spanned title = Html.fromHtml("<font>" + cityName + "</font>" + "&nbsp;<small><font>" + now.getTmp() + "℃</font></small>");
                 toolbar_title.setText(title);
                 Glide.with(WeatherActivity.this).load("http://files.heweather.com/cond_icon/" + now.getCond().getCode() + ".png").into(weather_icon);
@@ -196,6 +201,8 @@ public class WeatherActivity extends AppCompatActivity {
                 sugs_trav.setText(suggestion.getTrav().getTxt());
                 sugs_uv.setText(suggestion.getUv().getTxt());
                 addForeCast(weatherInfo.getDailyForcasts());
+                Spanned aqi = Html.fromHtml("<big><font>"+cityBean.getQlty()+"</font></big><br/><font>pm25指数"+cityBean.getPm25()+"</font>");
+                text_aqi.setText(aqi);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
