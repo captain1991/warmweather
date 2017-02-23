@@ -23,6 +23,7 @@ import com.xiaodong.warmweather.db.City;
 import com.xiaodong.warmweather.db.County;
 import com.xiaodong.warmweather.db.Province;
 import com.xiaodong.warmweather.util.HttpUtil;
+import com.xiaodong.warmweather.util.LogUtil;
 import com.xiaodong.warmweather.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -172,7 +173,7 @@ public class ChooseAreaFragment extends Fragment {
             area_list.setSelection(0);
         }else {
             String address = "http://guolin.tech/api/china/"+selectedProvince.getProvinceCode()+"/"+selectedCity.getCityCode();
-            Log.e("address", address);
+            LogUtil.e("address======="+address);
             queryFromServer(address,LEVEL_COUNTY);
         }
 
@@ -194,8 +195,6 @@ public class ChooseAreaFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                Log.e("response=========", response.body().string());
-
                 boolean result;
                 switch (level) {
                     case LEVEL_PROVINCE:

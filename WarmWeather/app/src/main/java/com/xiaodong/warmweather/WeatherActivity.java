@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +29,7 @@ import com.xiaodong.warmweather.gson.Suggestion;
 import com.xiaodong.warmweather.gson.WeatherInfo;
 import com.xiaodong.warmweather.service.WeatherService;
 import com.xiaodong.warmweather.util.HttpUtil;
+import com.xiaodong.warmweather.util.LogUtil;
 import com.xiaodong.warmweather.util.Utility;
 
 import java.io.IOException;
@@ -143,11 +143,12 @@ public class WeatherActivity extends AppCompatActivity {
         HttpUtil.sendOkHttpRequest("http://guolin.tech/api/weather?cityid=" + weatherCode + "&key=4e5ec8e307ba48e2921c023b78e45435", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("failure=========",e.toString());
-                Toast.makeText(WeatherActivity.this,"获取天气出错",Toast.LENGTH_SHORT).show();
+                LogUtil.e("failure=========" + e.toString());
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Toast.makeText(WeatherActivity.this,"获取天气出错",Toast.LENGTH_SHORT).show();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -161,7 +162,7 @@ public class WeatherActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(WEATHER_JSON_STRING,respStr);
                 editor.commit();
-                Log.d("response=========",respStr);
+                LogUtil.d("response========="+respStr);
                 try {
                     WeatherInfo weatherInfo = Utility.handleWeatherResponse(respStr);
                     showWeatherInfo(weatherInfo);
@@ -230,7 +231,7 @@ public class WeatherActivity extends AppCompatActivity {
             TextView text_date = (TextView)view.findViewById(R.id.text_date);
             TextView text_weather = (TextView)view.findViewById(R.id.text_weather);
             TextView text_daily_tmp = (TextView)view.findViewById(R.id.text_daily_tmp);
-            Log.d("dailyForcast===========", dailyForcast.getDate());
+            LogUtil.d("dailyForcast==========="+dailyForcast.getDate());
             String date = dailyForcast.getDate();
             String weather = "白天"+dailyForcast.getCond().getTxt_d()+"|夜晚"+dailyForcast.getCond().getTxt_n()+"|"+dailyForcast.getWind().getDir()+dailyForcast.getWind().getSc();
             String tmp = dailyForcast.getTmp().getMax()+"° / "+dailyForcast.getTmp().getMin()+"°";
