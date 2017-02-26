@@ -36,6 +36,7 @@ import com.xiaodong.warmweather.gson.WeatherInfo;
 import com.xiaodong.warmweather.service.WeatherService;
 import com.xiaodong.warmweather.util.HttpUtil;
 import com.xiaodong.warmweather.util.LogUtil;
+import com.xiaodong.warmweather.util.StatusBarCompat;
 import com.xiaodong.warmweather.util.Utility;
 
 import java.io.IOException;
@@ -73,6 +74,12 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+//        if(Build.VERSION.SDK_INT>=21){
+//            View decorView = getWindow().getDecorView();
+//            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            getWindow().setStatusBarColor(Color.TRANSPARENT);
+//        }
+        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimaryDark));
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
         cityName = sharedPreferences.getString(ChooseAreaFragment.SELECTED_CITYNAME, null);
         drawerLayout = (DrawerLayout) findViewById(R.id.draw_layout);
@@ -133,8 +140,9 @@ public class WeatherActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
-        String weatherStr = sharedPreferences.getString(WEATHER_JSON_STRING, null);
-        if (weatherStr != null) {
+        String weatherStr = sharedPreferences.getString(WEATHER_JSON_STRING, "");
+        if (!weatherStr.equals("")) {
+            LogUtil.d("PreferencesWeatherInfo==============="+weatherStr);
             WeatherInfo weatherInfo = Utility.handleWeatherResponse(weatherStr);
             showWeatherInfo(weatherInfo);
         } else {
@@ -189,35 +197,38 @@ public class WeatherActivity extends AppCompatActivity {
             swipeRefreshLayout.setRefreshing(false);
             return;
         }
-        final Now now = weatherInfo.getNow();
-        final Suggestion suggestion = weatherInfo.getSuggestion();
-        final Aqi aqi = weatherInfo.getAqi();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String bottom_content = now.getCond().getTxt() + now.getTmp() + "℃ | " + now.getWind().getDir() + now.getWind().getSc() + " | 相对湿度" + now.getHum() + "%";
-                textTmp.setText(bottom_content);
-                Spanned title = Html.fromHtml("<font>" + cityName + "</font>" + "&nbsp;<small><font>" + now.getTmp() + "℃</font></small>");
-                toolbar_title.setText(title);
-                Glide.with(WeatherActivity.this).load("http://files.heweather.com/cond_icon/" + now.getCond().getCode() + ".png").into(weather_icon);
-                sugs_comf.setText(suggestion.getComf().getTxt());
-                sugs_cw.setText(suggestion.getCw().getTxt());
-                sugs_drsg.setText(suggestion.getDrsg().getTxt());
-                sugs_flu.setText(suggestion.getFlu().getTxt());
-                sugs_sport.setText(suggestion.getSport().getTxt());
-                sugs_trav.setText(suggestion.getTrav().getTxt());
-                sugs_uv.setText(suggestion.getUv().getTxt());
-                addForeCast(weatherInfo.getDailyForcasts());
-                Aqi.CityBean cityBean = null;
-                if (aqi != null) {
-                    cityBean = aqi.getCity();
-                    Spanned aqispanned = Html.fromHtml("<big><font>" + cityBean.getQlty() + "</font></big><br/><font>pm25指数" + cityBean.getPm25() + "</font>");
-                    text_aqi.setText(aqispanned);
+        try {
+            final Now now = weatherInfo.getNow();
+            final Suggestion suggestion = weatherInfo.getSuggestion();
+            final Aqi aqi = weatherInfo.getAqi();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String bottom_content = now.getCond().getTxt() + now.getTmp() + "℃ | " + now.getWind().getDir() + now.getWind().getSc() + " | 相对湿度" + now.getHum() + "%";
+                    textTmp.setText(bottom_content);
+                    Spanned title = Html.fromHtml("<font>" + cityName + "</font>" + "&nbsp;<small><font>" + now.getTmp() + "℃</font></small>");
+                    toolbar_title.setText(title);
+                    Glide.with(WeatherActivity.this).load("http://files.heweather.com/cond_icon/" + now.getCond().getCode() + ".png").into(weather_icon);
+                    sugs_comf.setText(suggestion.getComf().getTxt());
+                    sugs_cw.setText(suggestion.getCw().getTxt());
+                    sugs_drsg.setText(suggestion.getDrsg().getTxt());
+                    sugs_flu.setText(suggestion.getFlu().getTxt());
+                    sugs_sport.setText(suggestion.getSport().getTxt());
+                    sugs_trav.setText(suggestion.getTrav().getTxt());
+                    sugs_uv.setText(suggestion.getUv().getTxt());
+                    addForeCast(weatherInfo.getDailyForcasts());
+                    Aqi.CityBean cityBean = null;
+                    if (aqi != null) {
+                        cityBean = aqi.getCity();
+                        Spanned aqispanned = Html.fromHtml("<big><font>" + cityBean.getQlty() + "</font></big><br/><font>pm25指数" + cityBean.getPm25() + "</font>");
+                        text_aqi.setText(aqispanned);
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         //启动后台自动更新服务
         Intent intent = new Intent(this, WeatherService.class);
         startService(intent);

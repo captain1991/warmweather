@@ -55,7 +55,7 @@ public class WeatherService extends Service {
         Intent mIntent = new Intent(this,WeatherService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this,0,mIntent,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long triggerAtTime = SystemClock.elapsedRealtime()+7*60*60*1000;
+        long triggerAtTime = SystemClock.elapsedRealtime()+3*60*60*1000;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,triggerAtTime,pendingIntent);
 
         return super.onStartCommand(intent, flags, startId);
@@ -94,13 +94,15 @@ public class WeatherService extends Service {
         int amp = calendar.get(Calendar.HOUR_OF_DAY);
         LogUtil.d("time==========" + amp);
         if (save_status != null) {
-            if (amp >= 20 || amp < 6 && save_status.equals("day")) {
+            //
+            if ( amp >= 20 || amp < 6 &&save_status.equals("day")) {
                 //20-6点为夜晚
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity0"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity1"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                 sharedPreferences.edit().putString("last_status","night").commit();
                 restartDeskTop(pm);
             } else if (amp>=6&&amp<20&&save_status.equals("night")){
+                //
                 sharedPreferences.edit().putString("last_status","day").commit();
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity0"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity1"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
@@ -116,7 +118,7 @@ public class WeatherService extends Service {
             }
         }
     }
-
+//重启手机桌面进程（否则再次进入程序会报错）
     private void restartDeskTop(PackageManager pm){
         ActivityManager am = (ActivityManager) getSystemService(Activity.ACTIVITY_SERVICE);
         Intent i = new Intent(Intent.ACTION_MAIN);
@@ -125,6 +127,7 @@ public class WeatherService extends Service {
         List<ResolveInfo> resolves = pm.queryIntentActivities(i, 0);
         for (ResolveInfo res : resolves) {
             if (res.activityInfo != null) {
+                LogUtil.d("activityInfo.packageName"+res.activityInfo.packageName);
                 am.killBackgroundProcesses(res.activityInfo.packageName);
             }
         }

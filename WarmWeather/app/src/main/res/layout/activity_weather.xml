@@ -1,141 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/draw_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/draw_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        >
 
-        <android.support.design.widget.CoordinatorLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/appbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="250dp">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:contentScrim="@color/colorPrimary"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:titleEnabled="false">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_collapseMode="parallax">
-
-                        <ImageView
-                            android:id="@+id/weather_pic"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop" />
-
-                        <TextView
-                            android:id="@+id/text_tmp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_margin="10dp"
-                            android:gravity="center_horizontal"
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/text_aqi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_marginTop="?attr/actionBarSize"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center_horizontal"
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp" />
-                    </RelativeLayout>
-
-
-                    <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:layout_collapseMode="pin">
-
-                        <TextView
-                            android:id="@+id/toolbar_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:singleLine="true"
-                            android:textColor="@android:color/white"
-                            android:textSize="20sp" />
-
-                        <ImageView
-                            android:id="@+id/weather_icon"
-                            android:layout_width="?attr/actionBarSize"
-                            android:layout_height="?attr/actionBarSize"
-                            android:layout_gravity="center"
-                            android:paddingBottom="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingTop="10dp"
-                            android:scaleType="centerInside" />
-
-                    </android.support.v7.widget.Toolbar>
-
-                </android.support.design.widget.CollapsingToolbarLayout>
-
-            </android.support.design.widget.AppBarLayout>
-
-            <android.support.v4.widget.NestedScrollView
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                >
 
-                <LinearLayout
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appbar_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:id="@+id/forecast_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"/>
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                        android:layout_marginRight="@dimen/activity_horizontal_margin"
-                        android:layout_marginTop="@dimen/activity_horizontal_margin"
-                        app:cardCornerRadius="8dp"
-                        android:outlineProvider="bounds"
-                        android:elevation="8dp"
-                        >
-                        <include layout="@layout/layout_suggestion" />
-                    </android.support.v7.widget.CardView>
-                </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
-        </android.support.design.widget.CoordinatorLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+                    android:layout_height="250dp"
+                    >
 
-    <fragment
-        android:name="com.xiaodong.warmweather.ChooseAreaFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start" />
-</android.support.v4.widget.DrawerLayout>
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/collapsing_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        app:contentScrim="@color/colorPrimary"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                        app:titleEnabled="false">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            app:layout_collapseMode="parallax">
+
+                            <ImageView
+                                android:id="@+id/weather_pic"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:scaleType="centerCrop" />
+
+                            <TextView
+                                android:id="@+id/text_tmp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_margin="10dp"
+                                android:gravity="center_horizontal"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/text_aqi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="?attr/actionBarSize"
+                                android:gravity="center_horizontal"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp" />
+                        </RelativeLayout>
+
+
+                        <android.support.v7.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+
+                            app:layout_collapseMode="pin">
+
+                            <TextView
+                                android:id="@+id/toolbar_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:singleLine="true"
+                                android:textColor="@android:color/white"
+                                android:textSize="20sp" />
+
+                            <ImageView
+                                android:id="@+id/weather_icon"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:layout_gravity="center"
+                                android:paddingBottom="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingTop="10dp"
+                                android:scaleType="centerInside" />
+
+                        </android.support.v7.widget.Toolbar>
+
+                    </android.support.design.widget.CollapsingToolbarLayout>
+
+                </android.support.design.widget.AppBarLayout>
+
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/forecast_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:elevation="8dp"
+                            android:outlineProvider="bounds"
+                            app:cardCornerRadius="8dp">
+
+                            <include layout="@layout/layout_suggestion" />
+                        </android.support.v7.widget.CardView>
+                    </LinearLayout>
+                </android.support.v4.widget.NestedScrollView>
+            </android.support.design.widget.CoordinatorLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <fragment
+            android:name="com.xiaodong.warmweather.ChooseAreaFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start" />
+    </android.support.v4.widget.DrawerLayout>
+</FrameLayout>
