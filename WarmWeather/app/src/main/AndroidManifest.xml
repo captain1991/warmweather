@@ -5,19 +5,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
-    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
-    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
-    <!--&lt;!&ndash; 如果需要精确定位的话请加上此权限 &ndash;&gt;-->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-    <!--<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />-->
-
-
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+    <!-- &lt;!&ndash; 如果需要精确定位的话请加上此权限 &ndash;&gt; -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -26,8 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/WeatherAppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".AreaActivity">
-        </activity>
+        <activity android:name=".AreaActivity"></activity>
         <activity android:name=".WeatherActivity">
             <intent-filter>
                 <action android:name="com.warmweather.act" />
@@ -39,11 +36,10 @@
         <service android:name=".service.WeatherService" />
 
         <activity android:name=".SplashActivity"></activity>
-
-         <activity android:name=".MiAdActivity"/>
+        <activity android:name=".MiAdActivity"></activity>
 
         <activity-alias
-            android:name="com.xiaodong.warmweather.AliasSplashActivity0"
+            android:name=".AliasSplashActivity0"
             android:enabled="true"
             android:icon="@mipmap/weather"
             android:targetActivity=".MiAdActivity">
@@ -53,9 +49,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
         <activity-alias
-            android:name="com.xiaodong.warmweather.AliasSplashActivity1"
+            android:name=".AliasSplashActivity1"
             android:enabled="false"
             android:icon="@mipmap/weather_night"
             android:targetActivity=".MiAdActivity">
@@ -65,22 +60,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
         //米盟
         <activity
             android:name="com.xiaomi.ad.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"></activity>
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         //腾讯广告联盟
         <service
             android:name="com.qq.e.comm.DownloadService"
             android:exported="false" />
+
         <activity
             android:name="com.qq.e.ads.ADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:name=".MapActivity"></activity>
     </application>
 
 </manifest>
