@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import com.xiaodong.warmweather.gson.Now;
 import com.xiaodong.warmweather.gson.Suggestion;
 import com.xiaodong.warmweather.gson.WeatherInfo;
 import com.xiaodong.warmweather.service.WeatherService;
+import com.xiaodong.warmweather.util.DownloadTask;
 import com.xiaodong.warmweather.util.HttpUtil;
 import com.xiaodong.warmweather.util.LogUtil;
 import com.xiaodong.warmweather.util.StatusBarCompat;
@@ -277,10 +279,44 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.weather_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.menu_download:
+                new DownloadTask(new DownloadTask.DownloadListener() {
+                    @Override
+                    public void onProgress(int progress) {
+                        LogUtil.d("download========"+progress);
+                    }
+
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onPuse() {
+
+                    }
+
+                    @Override
+                    public void onCancle() {
+
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                    }
+                }).execute("http://openbox.mobilem.360.cn/index/d/sid/3710770");
                 break;
         }
         return super.onOptionsItemSelected(item);
