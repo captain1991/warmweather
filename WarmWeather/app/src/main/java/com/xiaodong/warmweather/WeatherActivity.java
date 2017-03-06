@@ -35,7 +35,6 @@ import com.xiaodong.warmweather.gson.Now;
 import com.xiaodong.warmweather.gson.Suggestion;
 import com.xiaodong.warmweather.gson.WeatherInfo;
 import com.xiaodong.warmweather.service.WeatherService;
-import com.xiaodong.warmweather.util.DownloadTask;
 import com.xiaodong.warmweather.util.HttpUtil;
 import com.xiaodong.warmweather.util.LogUtil;
 import com.xiaodong.warmweather.util.StatusBarCompat;
@@ -291,32 +290,35 @@ public class WeatherActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.menu_download:
-                new DownloadTask(new DownloadTask.DownloadListener() {
-                    @Override
-                    public void onProgress(int progress) {
-                        LogUtil.d("download========"+progress);
-                    }
-
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onPuse() {
-
-                    }
-
-                    @Override
-                    public void onCancle() {
-
-                    }
-
-                    @Override
-                    public void onFailed() {
-
-                    }
-                }).execute("http://openbox.mobilem.360.cn/index/d/sid/3710770");
+                Intent intent = new Intent(this,MapActivity.class);
+                startActivity(intent);
+                //下载文件
+//                new DownloadTask(new DownloadTask.DownloadListener() {
+//                    @Override
+//                    public void onProgress(int progress) {
+//                        LogUtil.d("download========"+progress);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPuse() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancle() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailed() {
+//
+//                    }
+//                }).execute("http://openbox.mobilem.360.cn/index/d/sid/3710770");
                 break;
         }
         return super.onOptionsItemSelected(item);
