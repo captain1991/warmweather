@@ -12,6 +12,11 @@ import android.widget.Toast;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.xiaodong.warmweather.db.County;
+import com.xiaodong.warmweather.util.LogUtil;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +55,15 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void queryLocation() {
+        initLocation();
         locationClient.start();
+    }
+
+    private void initLocation(){
+        LocationClientOption option = new LocationClientOption();
+        option.setScanSpan(5000);
+        option.setIsNeedAddress(true);
+        locationClient.setLocOption(option);
     }
 
     @Override
@@ -74,12 +87,19 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        locationClient.stop();
+        super.onDestroy();
+    }
+
     class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             StringBuilder position = new StringBuilder();
-            position.append("纬度：").append(bdLocation.getLatitude()+"\n");
+            position.append("纬度：").append(bdLocation.getLatitude() + "\n");
             position.append("经度：").append(bdLocation.getLongitude() + "\n");
+            position.append("市：").append(bdLocation.getCity() + "\n");
             position.append("定位方式\n");
             if(bdLocation.getLocType()==BDLocation.TypeGpsLocation){
                 position.append("GPS\n");
@@ -87,6 +107,14 @@ public class MapActivity extends AppCompatActivity {
                 position.append("网络\n");
             }
             text_location.setText(position);
+//            setSelectedCity(bdLocation.getCity().replace("市", ""));
+        }
+    }
+
+    private void setSelectedCity(String cityName){
+        List<County> countys =DataSupport.where("countyName=?", cityName).find(County.class);
+        for (County county:countys) {
+            LogUtil.d(county.getCountyName());
         }
     }
 }
