@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,13 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
 import com.xiaodong.warmweather.db.County;
 import com.xiaodong.warmweather.util.LogUtil;
 
@@ -24,14 +33,23 @@ import java.util.List;
 public class MapActivity extends AppCompatActivity {
     LocationClient locationClient;
     TextView text_location;
+    MapView mapView;
+    BaiduMap baiduMap;
+    boolean isFirstLocate = true;
+    BDLocation bdLocation;
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
         text_location = (TextView) findViewById(R.id.text_location);
         locationClient = new LocationClient(this);
         locationClient.registerLocationListener(new MyLocationListener());
-
+        mapView = (MapView) findViewById(R.id.mapView);
+        button = (Button) findViewById(R.id.dingwei);
+        baiduMap = mapView.getMap();
+        baiduMap.setMyLocationEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<String> permissionList = new ArrayList<>();
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -52,6 +70,13 @@ public class MapActivity extends AppCompatActivity {
         } else {
             queryLocation();
         }
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLocation();
+            }
+        });
     }
 
     private void queryLocation() {
@@ -64,6 +89,27 @@ public class MapActivity extends AppCompatActivity {
         option.setScanSpan(5000);
         option.setIsNeedAddress(true);
         locationClient.setLocOption(option);
+    }
+
+    private void navigateTo(BDLocation location){
+        if(isFirstLocate) {
+            LogUtil.d("navigateTo==========");
+            LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
+            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+            baiduMap.animateMapStatus(update);
+            update = MapStatusUpdateFactory.zoomTo(26f);
+            baiduMap.animateMapStatus(update);
+            isFirstLocate = false;
+        }
+        MyLocationData.Builder builder = new MyLocationData.Builder().latitude(location.getLatitude()).longitude(location.getLongitude());
+        MyLocationData myLocationData =builder.build();
+        baiduMap.setMyLocationData(myLocationData);
+    }
+
+    private void showLocation(){
+        LatLng ll = new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude());
+        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+        baiduMap.animateMapStatus(update);
     }
 
     @Override
@@ -96,6 +142,7 @@ public class MapActivity extends AppCompatActivity {
     class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
+            MapActivity.this.bdLocation = bdLocation;
             StringBuilder position = new StringBuilder();
             position.append("纬度：").append(bdLocation.getLatitude() + "\n");
             position.append("经度：").append(bdLocation.getLongitude() + "\n");
@@ -107,6 +154,7 @@ public class MapActivity extends AppCompatActivity {
                 position.append("网络\n");
             }
             text_location.setText(position);
+            navigateTo(bdLocation);
 //            setSelectedCity(bdLocation.getCity().replace("市", ""));
         }
     }
