@@ -3,10 +3,13 @@ package com.xiaodong.warmweather;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
@@ -37,6 +40,7 @@ import com.xiaodong.warmweather.gson.WeatherInfo;
 import com.xiaodong.warmweather.service.WeatherService;
 import com.xiaodong.warmweather.util.HttpUtil;
 import com.xiaodong.warmweather.util.LogUtil;
+import com.xiaodong.warmweather.util.MyDataBaseHelper;
 import com.xiaodong.warmweather.util.StatusBarCompat;
 import com.xiaodong.warmweather.util.Utility;
 
@@ -70,11 +74,13 @@ public class WeatherActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private LinearLayout forecast_container;
     private TextView text_aqi;
+    private MyDataBaseHelper dataBaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        dataBaseHelper = Utility.getDefaultDb(this);
 //        if(Build.VERSION.SDK_INT>=21){
 //            View decorView = getWindow().getDecorView();
 //            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -143,7 +149,7 @@ public class WeatherActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
         String weatherStr = sharedPreferences.getString(WEATHER_JSON_STRING, "");
         if (!weatherStr.equals("")) {
-            LogUtil.d("PreferencesWeatherInfo==============="+weatherStr);
+            LogUtil.d("PreferencesWeatherInfo===============" + weatherStr);
             WeatherInfo weatherInfo = Utility.handleWeatherResponse(weatherStr);
             showWeatherInfo(weatherInfo);
         } else {
@@ -224,10 +230,11 @@ public class WeatherActivity extends AppCompatActivity {
                         Spanned aqispanned = Html.fromHtml("<big><font>" + cityBean.getQlty() + "</font></big><br/><font>pm25指数" + cityBean.getPm25() + "</font>");
                         text_aqi.setText(aqispanned);
                     }
+                    save2db(suggestion);
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //启动后台自动更新服务
@@ -235,6 +242,35 @@ public class WeatherActivity extends AppCompatActivity {
         startService(intent);
 //        切换图标
         checkAndChangeIcon();
+    }
+
+
+    private void save2db(Suggestion suggestion) {
+        SQLiteDatabase database = dataBaseHelper.getWritableDatabase();
+        Cursor cursor = database.query("suggestion", null, "county =?", new String[]{cityName}, null, null, null);
+        ContentValues values = new ContentValues();
+        values.put("county", cityName);
+        values.put("air", suggestion.getAir().getBrf());
+        values.put("comf", suggestion.getComf().getBrf());
+        values.put("cw", suggestion.getCw().getBrf());
+        values.put("sport", suggestion.getSport().getBrf());
+        try {
+
+            if (cursor == null || cursor.getCount() == 0) {
+                //插入操作
+                database.insert("suggestion", null, values);
+            } else {
+                //更新操作
+                database.update("suggestion", values, "county =?", new String[]{cityName});
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
     public void handleWeatherPic() {
@@ -279,7 +315,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.weather_menu,menu);
+        getMenuInflater().inflate(R.menu.weather_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -290,7 +326,7 @@ public class WeatherActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.menu_download:
-                Intent intent = new Intent(this,MapActivity.class);
+                Intent intent = new Intent(this, MapActivity.class);
                 startActivity(intent);
                 //下载文件
 //                new DownloadTask(new DownloadTask.DownloadListener() {
@@ -337,26 +373,26 @@ public class WeatherActivity extends AppCompatActivity {
                 //20-6点为夜晚
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity0"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity1"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                sharedPreferences.edit().putString("last_status","night").commit();
+                sharedPreferences.edit().putString("last_status", "night").commit();
                 restartDeskTop(pm);
-            } else if (amp>=6&&amp<20&&save_status.equals("night")){
-                sharedPreferences.edit().putString("last_status","day").commit();
+            } else if (amp >= 6 && amp < 20 && save_status.equals("night")) {
+                sharedPreferences.edit().putString("last_status", "day").commit();
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity0"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity1"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 restartDeskTop(pm);
             }
-        }else {
+        } else {
             if (amp >= 20 || amp < 6) {
                 //20-6点为夜晚
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity0"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 pm.setComponentEnabledSetting(new ComponentName(this, "com.xiaodong.warmweather.AliasSplashActivity1"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                sharedPreferences.edit().putString("last_status","night").commit();
+                sharedPreferences.edit().putString("last_status", "night").commit();
                 restartDeskTop(pm);
             }
         }
     }
 
-    private void restartDeskTop(PackageManager pm){
+    private void restartDeskTop(PackageManager pm) {
         ActivityManager am = (ActivityManager) getSystemService(Activity.ACTIVITY_SERVICE);
         Intent i = new Intent(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_HOME);

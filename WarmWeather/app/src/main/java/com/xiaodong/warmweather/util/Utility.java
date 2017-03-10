@@ -1,5 +1,7 @@
 package com.xiaodong.warmweather.util;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.xiaodong.warmweather.db.City;
 import com.xiaodong.warmweather.db.County;
@@ -96,5 +98,9 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static MyDataBaseHelper getDefaultDb(Context context){
+        return new MyDataBaseHelper(context,"cptest.db",null,2);
     }
 }
