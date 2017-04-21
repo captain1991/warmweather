@@ -80,7 +80,7 @@ public class WeatherService extends Service {
                 editor.putString(WeatherActivity.WEATHER_JSON_STRING, respStr);
                 editor.commit();
                 Log.d("response=========", respStr);
-                checkAndChangeIcon();
+//                checkAndChangeIcon();
             }
         });
     }

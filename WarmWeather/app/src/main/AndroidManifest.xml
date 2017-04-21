@@ -49,31 +49,38 @@
 
         <service android:name=".service.WeatherService" />
 
-        <activity android:name=".SplashActivity" />
-        <activity android:name=".MiAdActivity" />
-
-        <activity-alias
-            android:name=".AliasSplashActivity0"
-            android:enabled="true"
-            android:icon="@mipmap/weather"
-            android:targetActivity=".MiAdActivity">
+        <activity android:name=".SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:name=".AliasSplashActivity1"
-            android:enabled="false"
-            android:icon="@mipmap/weather_night"
-            android:targetActivity=".MiAdActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
+        <activity android:name=".MiAdActivity" >
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
+        </activity>
+
+        <!--<activity-alias-->
+            <!--android:name=".AliasSplashActivity0"-->
+            <!--android:enabled="true"-->
+            <!--android:icon="@mipmap/weather"-->
+            <!--android:targetActivity=".SplashActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity-alias>-->
+        <!--<activity-alias-->
+            <!--android:name=".AliasSplashActivity1"-->
+            <!--android:enabled="false"-->
+            <!--android:icon="@mipmap/weather_night"-->
+            <!--android:targetActivity=".SplashActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity-alias>-->
         //米盟
         <activity
             android:name="com.xiaomi.ad.AdActivity"

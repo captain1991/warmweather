@@ -80,7 +80,7 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        dataBaseHelper = Utility.getDefaultDb(this);
+//        dataBaseHelper = Utility.getDefaultDb(this);
 //        if(Build.VERSION.SDK_INT>=21){
 //            View decorView = getWindow().getDecorView();
 //            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -230,7 +230,7 @@ public class WeatherActivity extends AppCompatActivity {
                         Spanned aqispanned = Html.fromHtml("<big><font>" + cityBean.getQlty() + "</font></big><br/><font>pm25指数" + cityBean.getPm25() + "</font>");
                         text_aqi.setText(aqispanned);
                     }
-                    save2db(suggestion);
+//                    save2db(suggestion);
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
@@ -241,7 +241,7 @@ public class WeatherActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WeatherService.class);
         startService(intent);
 //        切换图标
-        checkAndChangeIcon();
+//        checkAndChangeIcon();
     }
 
 
